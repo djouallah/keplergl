@@ -2,13 +2,24 @@
   <head>
     <title>deck.gl solar Farm  Example</title>
     <script src="https://unpkg.com/deck.gl@^7.0.0/dist.min.js"></script>
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js"></script>
   </head>
   <body>
     <div id="container"></div>      
   </body>
   <script type="text/javascript">
     const {DeckGL, ScatterplotLayer} = deck;  
+    function get_colour( d ) {
+        if( d === '1-pile' ) {
+            return [0,128,255]
+        } else if ( d === '2-Tracker') {
+            return [255,100,128]
+        } else if ( d === '3-module') {
+            return [128, 128, 128]
+        } else {
+            return [255, 255, 255]
+        }
+    }
     new DeckGL({
       mapboxApiAccessToken: 'pk.eyJ1IjoibWltNzg3IiwiYSI6ImNrMDFwbnNxajJseG8zY21sY2l0Mmp3MnMifQ.LQMXWc8aDucjeSkqGvRNPw',
       mapStyle: 'mapbox://styles/mapbox/satellite-streets-v9',
@@ -25,7 +36,7 @@
         radiusScale: 3,
         radiusMinPixels: 0.25,
         getPosition: d => [d[0], d[1], 0],
-        getFillColor: d => (d[3] === '1-pile' ? [0, 128, 255] : [255, 100, 128])
+        getFillColor: d => get_colour( d[3] )
       })
       ]
     });
