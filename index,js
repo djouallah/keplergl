@@ -1,0 +1,50 @@
+
+const dscc = require('@google/dscc');
+const viz = require('@google/dscc-scripts/viz/initialViz.js');
+const local = require('./localMessage.js');
+
+import {Deck} from '@deck.gl/core';
+import {ScatterplotLayer} from '@deck.gl/layers';
+// change this to 'true' for local development
+// change this to 'false' before deploying
+export const LOCAL = true;
+var chartElement = document.createElement('div');
+chartElement.id = 'container';
+document.body.appendChild(chartElement);
+var canvasElement = document.createElement('canvas');
+var ctx = canvasElement.getContext('2d');
+canvasElement.id = 'container';
+document.body.appendChild(canvasElement);
+
+const INITIAL_VIEW_STATE = {
+  longitude: 143.499772,
+  latitude:  -34.7773053,
+  zoom: 15,
+  minZoom: 5,
+  maxZoom: 20,
+  pitch: 40.5,
+};
+
+const drawViz = (data) => {
+    
+  // write viz code here
+const deckgl = new Deck({
+  initialViewState: INITIAL_VIEW_STATE,
+  controller: true,
+  layers: [
+    new ScatterplotLayer({
+      data: 'https://raw.githubusercontent.com/djouallah/keplergl/master/docs/data.json',
+      radiusScale: 3,
+      radiusMinPixels: 3,
+      getPosition: d => d.coordinates,
+      getFillColor: d => d.colorcode,
+    })
+  ]
+});
+};
+// renders locally
+if (LOCAL) {
+  drawViz(local.message);
+} else {
+  dscc.subscribeToData(drawViz, {transform: dscc.objectTransform});
+}
